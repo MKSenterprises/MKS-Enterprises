@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MKS Enterprises — Grocery Portal</title>
+  <meta name="theme-color" content="#2d7a22"/>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{background:#f5f8f2;font-family:'DM Sans',sans-serif;}
+    input[type=number]::-webkit-inner-spin-button{opacity:1;}
+    a{text-decoration:none;}
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useRef, useMemo } = React;
+
+const T={en:{appName:"MKS Enterprises",tagline:"Grocery Supply Portal",welcome:"Welcome!",loginSub:"Enter your mobile number to login",mobile:"Mobile Number",sendOtp:"Send OTP",enterOtp:"Enter OTP",verify:"Verify & Login",change:"Change",demoHint:"Demo OTP: 1234 · Admin: 9999999999",dashboard:"Dashboard",hello:"Hello",outstanding:"Outstanding",totalOrders:"Total Orders",placeOrder:"Place Order",emergency:"Emergency",sendPayment:"Send Payment",myInvoices:"My Invoices",weeklyGrocery:"Weekly grocery",urgentItems:"Urgent items",shareProof:"Share payment proof",viewBills:"View all bills",reorderLast:"Repeat Last Order",liveTracking:"Live Tracking",recentOrders:"Recent Orders",quickActions:"Quick Actions",cart:"Cart",confirmOrder:"Confirm & Place Order",billSummary:"Bill Summary",taxable:"Taxable",grandTotal:"Grand Total",dueDate:"Due Date",creditDays:"credit days",orderPlaced:"Order Placed!",whatsappConfirm:"Send on WhatsApp",backDash:"Back to Dashboard",downloadInvoice:"Download Invoice",invoices:"My Invoices",payNow:"Pay Now",paid:"Paid",overdue:"Overdue",pending:"Pending",received:"Received",preparing:"Preparing",outForDelivery:"Out for Delivery",delivered:"Delivered",bankDetails:"Bank Details",amountPaid:"Amount Paid (₹)",transactionId:"UTR / Transaction ID",confirmPayment:"Confirm Payment",scanUPI:"Scan & Pay via UPI",orPayTo:"OR Pay to Bank Account",emergencyOrder:"Emergency Order",itemsNeeded:"Items Needed",requiredBy:"Required By",sendEmergency:"Send Emergency Request",voiceInput:"🎤 Speak your order",listening:"Listening...",add:"Add",remove:"Remove",back:"← Back",adminPanel:"Admin Panel",orders:"Orders",clients:"Clients",outstanding2:"Outstanding",priceLists:"Price Lists",search:"Search client or invoice...",totalInvoiced:"Total Invoiced",collected:"Collected",newOrders:"New Orders",sendReminder:"Send WhatsApp Reminder",updatePrices:"Update Prices",uploadExcel:"Upload Excel",logout:"Logout",noOrders:"No orders yet",noInvoices:"No invoices yet",paymentReceipt:"Payment Receipt",fullSettled:"Fully Settled",editInvoice:"Edit Invoice",saveChanges:"Save Changes",cancel:"Cancel",pdfPrint:"PDF / Print",excelCsv:"Excel (.csv)",whatsapp:"WhatsApp",printReady:"GST invoice · Print ready",openExcel:"Open in Excel / Sheets",sendSummary:"Send invoice summary via WhatsApp",remind:"Remind",edit:"Edit",invoice:"Invoice",perUnit:"per",exclusiveRates:"Your exclusive rates",typeQty:"Type qty or use +/−"},te:{appName:"MKS ఎంటర్‌ప్రైజెస్",tagline:"కిరాణా సరఫరా పోర్టల్",welcome:"స్వాగతం!",loginSub:"లాగిన్ కోసం మీ మొబైల్ నంబర్ నమోదు చేయండి",mobile:"మొబైల్ నంబర్",sendOtp:"OTP పంపండి",enterOtp:"OTP నమోదు చేయండి",verify:"ధృవీకరించి లాగిన్ చేయండి",change:"మార్చు",demoHint:"డెమో OTP: 1234 · అడ్మిన్: 9999999999",dashboard:"డాష్‌బోర్డ్",hello:"నమస్కారం",outstanding:"బాకీ మొత్తం",totalOrders:"మొత్తం ఆర్డర్లు",placeOrder:"ఆర్డర్ ఇవ్వండి",emergency:"అత్యవసరం",sendPayment:"చెల్లింపు పంపండి",myInvoices:"నా బిల్లులు",weeklyGrocery:"వారపు కిరాణా",urgentItems:"అత్యవసర వస్తువులు",shareProof:"చెల్లింపు రుజువు పంపండి",viewBills:"అన్ని బిల్లులు చూడండి",reorderLast:"చివరి ఆర్డర్ మళ్ళీ చేయండి",liveTracking:"లైవ్ ట్రాకింగ్",recentOrders:"ఇటీవలి ఆర్డర్లు",quickActions:"త్వరిత చర్యలు",cart:"కార్ట్",confirmOrder:"ఆర్డర్ నిర్ధారించండి",billSummary:"బిల్ సారాంశం",taxable:"పన్ను విధించే మొత్తం",grandTotal:"మొత్తం",dueDate:"చెల్లించాల్సిన తేది",creditDays:"క్రెడిట్ రోజులు",orderPlaced:"ఆర్డర్ చేయబడింది!",whatsappConfirm:"WhatsApp లో పంపండి",backDash:"డాష్‌బోర్డ్ కి వెళ్ళు",downloadInvoice:"బిల్లు డౌన్‌లోడ్",invoices:"నా బిల్లులు",payNow:"ఇప్పుడే చెల్లించండి",paid:"చెల్లించారు",overdue:"గడువు మించింది",pending:"పెండింగ్",received:"అందింది",preparing:"సిద్ధం చేస్తున్నారు",outForDelivery:"డెలివరీకి వెళ్ళింది",delivered:"అందజేయబడింది",bankDetails:"బ్యాంక్ వివరాలు",amountPaid:"చెల్లించిన మొత్తం (₹)",transactionId:"UTR / ట్రాన్సాక్షన్ ID",confirmPayment:"చెల్లింపు నిర్ధారించండి",scanUPI:"UPI స్కాన్ చేసి చెల్లించండి",orPayTo:"లేదా బ్యాంక్ ఖాతాకు చెల్లించండి",emergencyOrder:"అత్యవసర ఆర్డర్",itemsNeeded:"అవసరమైన వస్తువులు",requiredBy:"ఎప్పటికి కావాలి",sendEmergency:"అత్యవసర అభ్యర్థన పంపండి",voiceInput:"🎤 మాట్లాడి ఆర్డర్ చేయండి",listening:"వింటున్నాను...",add:"జోడించు",remove:"తొలగించు",back:"← వెనక్కి",adminPanel:"అడ్మిన్ పానెల్",orders:"ఆర్డర్లు",clients:"క్లయింట్లు",outstanding2:"బాకీ",priceLists:"ధర జాబితాలు",search:"క్లయింట్ లేదా ఇన్వాయిస్ వెతకండి...",totalInvoiced:"మొత్తం ఇన్వాయిస్",collected:"వసూలైంది",newOrders:"కొత్త ఆర్డర్లు",sendReminder:"WhatsApp రిమైండర్ పంపండి",updatePrices:"ధరలు నవీకరించండి",uploadExcel:"Excel అప్‌లోడ్",logout:"లాగ్అవుట్",noOrders:"ఇంకా ఆర్డర్లు లేవు",noInvoices:"ఇంకా బిల్లులు లేవు",paymentReceipt:"చెల్లింపు రసీదు",fullSettled:"పూర్తిగా చెల్లించారు",editInvoice:"ఇన్వాయిస్ సవరించండి",saveChanges:"మార్పులు సేవ్ చేయండి",cancel:"రద్దు చేయి",pdfPrint:"PDF / ప్రింట్",excelCsv:"Excel (.csv)",whatsapp:"WhatsApp",printReady:"GST బిల్లు · ప్రింట్ రెడీ",openExcel:"Excel లో తెరవండి",sendSummary:"WhatsApp ద్వారా పంపండి",remind:"రిమైండర్",edit:"సవరించు",invoice:"బిల్లు",perUnit:"కు",exclusiveRates:"మీ ప్రత్యేక ధరలు",typeQty:"పరిమాణం టైప్ చేయండి"},ko:{appName:"MKS 엔터프라이즈",tagline:"식료품 공급 포털",welcome:"환영합니다!",loginSub:"로그인하려면 휴대폰 번호를 입력하세요",mobile:"휴대폰 번호",sendOtp:"OTP 전송",enterOtp:"OTP 입력",verify:"인증 및 로그인",change:"변경",demoHint:"데모 OTP: 1234 · 관리자: 9999999999",dashboard:"대시보드",hello:"안녕하세요",outstanding:"미결제",totalOrders:"총 주문",placeOrder:"주문하기",emergency:"긴급 주문",sendPayment:"결제 전송",myInvoices:"내 청구서",weeklyGrocery:"주간 식료품",urgentItems:"긴급 품목",shareProof:"결제 증명 공유",viewBills:"모든 청구서 보기",reorderLast:"마지막 주문 재주문",liveTracking:"실시간 추적",recentOrders:"최근 주문",quickActions:"빠른 메뉴",cart:"장바구니",confirmOrder:"주문 확인",billSummary:"청구 요약",taxable:"과세 금액",grandTotal:"합계",dueDate:"결제 기한",creditDays:"신용 일수",orderPlaced:"주문 완료!",whatsappConfirm:"WhatsApp으로 전송",backDash:"대시보드로 돌아가기",downloadInvoice:"청구서 다운로드",invoices:"내 청구서",payNow:"지금 결제",paid:"결제 완료",overdue:"기한 초과",pending:"대기 중",received:"접수됨",preparing:"준비 중",outForDelivery:"배달 중",delivered:"배달 완료",bankDetails:"은행 정보",amountPaid:"결제 금액 (₹)",transactionId:"UTR / 거래 ID",confirmPayment:"결제 확인",scanUPI:"UPI 스캔 결제",orPayTo:"또는 계좌로 결제",emergencyOrder:"긴급 주문",itemsNeeded:"필요한 품목",requiredBy:"필요 시간",sendEmergency:"긴급 요청 전송",voiceInput:"🎤 말로 주문하기",listening:"듣는 중...",add:"추가",remove:"제거",back:"← 뒤로",adminPanel:"관리자 패널",orders:"주문",clients:"고객",outstanding2:"미결제",priceLists:"가격표",search:"고객 또는 청구서 검색...",totalInvoiced:"총 청구",collected:"수금됨",newOrders:"새 주문",sendReminder:"WhatsApp 알림 전송",updatePrices:"가격 업데이트",uploadExcel:"Excel 업로드",logout:"로그아웃",noOrders:"아직 주문 없음",noInvoices:"아직 청구서 없음",paymentReceipt:"결제 영수증",fullSettled:"완전 정산",editInvoice:"청구서 편집",saveChanges:"변경 저장",cancel:"취소",pdfPrint:"PDF / 인쇄",excelCsv:"Excel (.csv)",whatsapp:"WhatsApp",printReady:"GST 청구서 · 인쇄 준비",openExcel:"Excel에서 열기",sendSummary:"WhatsApp으로 청구서 전송",remind:"알림",edit:"편집",invoice:"청구서",perUnit:"당",exclusiveRates:"전용 가격",typeQty:"수량 입력"}};
+
+const BUSINESS={name:"Mks Enterprises",address:"14-503, Revenue Ward No.14, Btr Colony\nSri Sathyasai, Andhra Pradesh - 515110",phone:"7396573600",email:"ayazbasha7100@gmail.com",gstin:"37GFNPB0009A1Z3",bank:"Axis Bank",branch:"Penukonda",accName:"MIRAPAKAYALA AYAZ BASHA",accNo:"924020001244088",ifsc:"UTIB0004092",upi:"7396573600-2@ybl"};
+
+const CLIENTS={"9876543210":{id:1,name:"Akicia Foods",contact:"Ramesh Kumar",gstin:"33AHHPM9448G1Z3",pan:"AHHPM9448G",phone:"84386 33204",address:"Door No 16-a, Aps Building, Om Ganesh Nagar, Vadavalli, Coimbatore, Tamil Nadu - 641041",creditDays:15},"9123456780":{id:2,name:"XYZ Tech Cafeteria",contact:"Priya Sharma",gstin:"29XYZDE5678G2Z1",pan:"XYZDE5678G",phone:"9123456780",address:"Whitefield, Bengaluru - 560066",creditDays:15},"9988776655":{id:3,name:"Green Leaf Kitchen",contact:"Suresh Nair",gstin:"29GLNAI9012H3Z9",pan:"GLNAI9012H",phone:"9988776655",address:"Koramangala, Bengaluru - 560034",creditDays:30},"9765432100":{id:4,name:"Sunrise Food Court",contact:"Meena Reddy",gstin:"29SRFCI3456I4Z7",pan:"SRFCI3456I",phone:"9765432100",address:"Indiranagar, Bengaluru - 560038",creditDays:45},"9654321098":{id:5,name:"Blue Star Canteen",contact:"Arjun Singh",gstin:"29BSCSI7890J5Z3",pan:"BSCSI7890J",phone:"9654321098",address:"HSR Layout, Bengaluru - 560102",creditDays:30}};
+
+const EMOJIS={"Sugar (Loose 50kg bag)":"🍚","Tomatoes":"🍅","Onions":"🧅","Potatoes":"🥔","Green Chillies":"🌶️","Coriander":"🌿","Cooking Oil":"🫙","Milk":"🥛","Bread":"🍞","Rice (Basmati)":"🌾"};
+const BASE_ITEMS=[{id:1,name:"Sugar (Loose 50kg bag)",hsn:"1701",unit:"KGS",price:40,category:"Grocery"},{id:2,name:"Tomatoes",hsn:"0702",unit:"KGS",price:35,category:"Vegetables"},{id:3,name:"Onions",hsn:"0703",unit:"KGS",price:30,category:"Vegetables"},{id:4,name:"Potatoes",hsn:"0701",unit:"KGS",price:28,category:"Vegetables"},{id:5,name:"Green Chillies",hsn:"0904",unit:"KGS",price:80,category:"Vegetables"},{id:6,name:"Coriander",hsn:"0909",unit:"KGS",price:120,category:"Vegetables"},{id:7,name:"Cooking Oil",hsn:"1511",unit:"LTR",price:150,category:"Grocery"},{id:8,name:"Milk",hsn:"0401",unit:"LTR",price:60,category:"Dairy"},{id:9,name:"Bread",hsn:"1905",unit:"PCS",price:25,category:"Bakery"},{id:10,name:"Rice (Basmati)",hsn:"1006",unit:"KGS",price:85,category:"Grocery"}];
+const CLIENT_PRICES={};for(let i=1;i<=5;i++)CLIENT_PRICES[i]=BASE_ITEMS.map(x=>({...x,price:x.price+(i-1)*2}));
+const cv=Object.values(CLIENTS);
+const SEED=[{id:"INV-016",date:"04-Mar-2026",dueDate:"19-Mar-2026",client:"Akicia Foods",clientId:1,clientData:cv[0],taxable:40000,gst:2000,gstRate:5,amount:42000,status:"Delivered",invStatus:"Paid",paidAmt:42000,items:[{name:"Sugar (Loose 50kg bag)",hsn:"1701",qty:1000,unit:"KGS",rate:40,taxable:40000}]},{id:"INV-015",date:"25-Feb-2026",dueDate:"12-Mar-2026",client:"XYZ Tech Cafeteria",clientId:2,clientData:cv[1],taxable:8476,gst:424,gstRate:5,amount:8900,status:"Delivered",invStatus:"Overdue",paidAmt:0,items:[{name:"Tomatoes",hsn:"0702",qty:100,unit:"KGS",rate:35,taxable:3500},{name:"Onions",hsn:"0703",qty:150,unit:"KGS",rate:33,taxable:4976}]},{id:"INV-014",date:"20-Feb-2026",dueDate:"07-Mar-2026",client:"Green Leaf Kitchen",clientId:3,clientData:cv[2],taxable:6200,gst:310,gstRate:5,amount:6510,status:"Preparing",invStatus:"Pending",paidAmt:0,items:[{name:"Potatoes",hsn:"0701",qty:200,unit:"KGS",rate:31,taxable:6200}]},{id:"INV-013",date:"18-Feb-2026",dueDate:"04-Mar-2026",client:"Sunrise Food Court",clientId:4,clientData:cv[3],taxable:9750,gst:488,gstRate:5,amount:10238,status:"Received",invStatus:"Pending",paidAmt:0,items:[{name:"Rice (Basmati)",hsn:"1006",qty:100,unit:"KGS",rate:87,taxable:8700}]},{id:"INV-012",date:"15-Feb-2026",dueDate:"02-Mar-2026",client:"Blue Star Canteen",clientId:5,clientData:cv[4],taxable:7600,gst:380,gstRate:5,amount:7980,status:"Delivered",invStatus:"Paid",paidAmt:7980,items:[{name:"Milk",hsn:"0401",qty:100,unit:"LTR",rate:62,taxable:6200},{name:"Bread",hsn:"1905",qty:56,unit:"PCS",rate:25,taxable:1400}]}];
+
+const STAGES=["Received","Preparing","Out for Delivery","Delivered"];
+const INV_ST=["Pending","Sent","Paid","Overdue"];
+const CATS=["All","Grocery","Vegetables","Dairy","Bakery"];
+const ADMIN="9999999999";
+
+const toWords=n=>{if(!n||n===0)return"ZERO RUPEES ONLY";const o=["","ONE","TWO","THREE","FOUR","FIVE","SIX","SEVEN","EIGHT","NINE","TEN","ELEVEN","TWELVE","THIRTEEN","FOURTEEN","FIFTEEN","SIXTEEN","SEVENTEEN","EIGHTEEN","NINETEEN"];const t=["","","TWENTY","THIRTY","FORTY","FIFTY","SIXTY","SEVENTY","EIGHTY","NINETY"];const ck=x=>x<20?o[x]:t[Math.floor(x/10)]+(x%10?" "+o[x%10]:"");let r="",m=Math.round(n);if(m>=10000000){r+=ck(Math.floor(m/10000000))+" CRORE ";m%=10000000;}if(m>=100000){r+=ck(Math.floor(m/100000))+" LAKH ";m%=100000;}if(m>=1000){r+=ck(Math.floor(m/1000))+" THOUSAND ";m%=1000;}if(m>=100){r+=ck(Math.floor(m/100))+" HUNDRED ";m%=100;}if(m>0)r+=ck(m);return r.trim()+" RUPEES ONLY";};
+const fi=n=>"₹"+Number(n).toLocaleString("en-IN",{minimumFractionDigits:2});
+const ts=()=>new Date().toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"}).replace(/ /g,"-");
+const dd=days=>{const d=new Date();d.setDate(d.getDate()+days);return d.toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"}).replace(/ /g,"-");};
+const nextNo=orders=>`INV-${String(Math.max(...orders.map(o=>parseInt(o.id.split("-")[1])||0),16)+1).padStart(3,"0")}`;
+const waUrl=(phone,msg)=>`https://wa.me/91${phone.replace(/\s/g,"")}?text=${encodeURIComponent(msg)}`;
+const waUrlNoPhone=(msg)=>`https://wa.me/?text=${encodeURIComponent(msg)}`;
+
+const K={green:"#2d7a22",text:"#1a2e1a",mu:"#6b8f63",border:"#e8f0e0",red:"#c0392b",am:"#e67e22",bl:"#2980b9"};
+const S={
+  app:{minHeight:"100vh",background:"#f5f8f2",color:K.text,fontFamily:"'DM Sans',sans-serif"},
+  card:(e={})=>({background:"#fff",border:`1.5px solid ${K.border}`,borderRadius:18,padding:20,boxShadow:"0 2px 12px rgba(45,122,34,0.07)",...e}),
+  btn:(color=K.green,e={})=>({background:color,color:"#fff",border:"none",borderRadius:16,padding:"16px 24px",fontSize:16,fontWeight:700,cursor:"pointer",display:"flex",alignItems:"center",gap:10,justifyContent:"center",...e}),
+  outBtn:(e={})=>({background:"transparent",color:K.green,border:`2px solid ${K.green}`,borderRadius:14,padding:"13px 20px",fontSize:15,fontWeight:700,cursor:"pointer",display:"flex",alignItems:"center",gap:8,justifyContent:"center",...e}),
+  ghost:(e={})=>({background:"transparent",color:K.mu,border:"none",padding:"8px 12px",fontSize:14,fontWeight:600,cursor:"pointer",...e}),
+  inp:{width:"100%",padding:"14px 16px",background:"#f0f7ee",border:`2px solid ${K.border}`,borderRadius:12,color:K.text,fontSize:16,outline:"none",boxSizing:"border-box"},
+  nav:{background:"#fff",borderBottom:`2px solid ${K.border}`,padding:"12px 18px",display:"flex",justifyContent:"space-between",alignItems:"center",position:"sticky",top:0,zIndex:100,boxShadow:"0 2px 8px rgba(0,0,0,0.06)"},
+  badge:s=>({display:"inline-block",padding:"4px 12px",borderRadius:20,fontSize:12,fontWeight:700,...(s==="Paid"||s==="Delivered"?{background:"#e8f8e8",color:"#1a7a1a"}:s==="Overdue"?{background:"#fdeaea",color:"#c0392b"}:s==="Pending"||s==="Received"?{background:"#e8f0ff",color:"#2560c8"}:s==="Sent"?{background:"#fff8e8",color:"#c07000"}:s==="Preparing"?{background:"#fff3e0",color:"#e65c00"}:s==="Out for Delivery"?{background:"#f0e8ff",color:"#6a00c8"}:{background:"#f0f0f0",color:"#666"})})
+};
+
+const MKSLogo=({size=52})=>(
+  <svg width={size} height={size} viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="48" fill="#2d7a22" stroke="#1a5c14" strokeWidth="2"/>
+    <circle cx="50" cy="50" r="40" fill="none" stroke="#7ec87a" strokeWidth="1.5" strokeDasharray="4 3"/>
+    <text x="50" y="44" textAnchor="middle" fill="white" fontSize="22" fontWeight="900" fontFamily="Arial Black,sans-serif">MKS</text>
+    <text x="50" y="62" textAnchor="middle" fill="#b8f0b4" fontSize="8.5" fontFamily="Arial,sans-serif">ENTERPRISES</text>
+    <path d="M22 70 Q50 78 78 70" stroke="#7ec87a" strokeWidth="1.5" fill="none"/>
+  </svg>
+);
+
+const WABtn=({href,label,style:s={},block=false})=>(
+  <a href={href} target="_blank" rel="noopener noreferrer"
+    style={{display:block?"flex":"inline-flex",alignItems:"center",justifyContent:"center",gap:10,padding:"16px 24px",borderRadius:16,background:"#25a244",color:"#fff",fontWeight:700,fontSize:17,textDecoration:"none",boxShadow:"0 4px 14px #25a24444",width:block?"100%":"auto",boxSizing:"border-box",...s}}>
+    {label}
+  </a>
+);
+
+function LangPicker({lang,setLang}){
+  return(
+    <div style={{display:"flex",gap:4,background:"#f0f7ee",borderRadius:12,padding:3}}>
+      {[{c:"en",l:"EN 🇬🇧"},{c:"te",l:"తె 🇮🇳"},{c:"ko",l:"한 🇰🇷"}].map(o=>(
+        <button key={o.c} onClick={()=>setLang(o.c)} style={{padding:"5px 10px",borderRadius:9,border:"none",cursor:"pointer",fontSize:12,fontWeight:700,background:lang===o.c?K.green:"transparent",color:lang===o.c?"#fff":K.mu}}>{o.l}</button>
+      ))}
+    </div>
+  );
+}
+function Tst({t}){return <div style={{position:"fixed",top:16,left:"50%",transform:"translateX(-50%)",background:t.type==="e"?"#fdeaea":"#e8f8e8",color:t.type==="e"?"#c0392b":"#1a7a1a",padding:"12px 22px",borderRadius:12,fontSize:14,fontWeight:700,zIndex:9999,border:`2px solid ${t.type==="e"?"#e08080":"#80c880"}`,boxShadow:"0 4px 20px rgba(0,0,0,0.12)",whiteSpace:"nowrap",pointerEvents:"none"}}>{t.msg}</div>;}
+function BottomNav({screen,setS,t}){return(<div style={{position:"fixed",bottom:0,left:0,right:0,background:"#fff",borderTop:`2px solid ${K.border}`,display:"flex",justifyContent:"space-around",padding:"8px 0 12px",zIndex:50}}>{[{e:"🏠",l:t.dashboard,s:"dash"},{e:"🛍️",l:t.placeOrder,s:"order"},{e:"🧾",l:t.myInvoices,s:"inv"},{e:"💳",l:t.sendPayment,s:"pay"}].map(b=>(<button key={b.s} onClick={()=>setS(b.s)} style={{background:"none",border:"none",cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",gap:2,padding:"4px 12px"}}><span style={{fontSize:22}}>{b.e}</span><span style={{fontSize:10,color:screen===b.s?K.green:K.mu,fontWeight:screen===b.s?700:400}}>{b.l}</span></button>))}</div>);}
+
+function EditModal({order,onSave,onClose,t}){
+  const[items,setItems]=useState(order.items.map(i=>({...i})));
+  const upd=(idx,f,v)=>setItems(p=>p.map((it,i)=>i===idx?{...it,[f]:f==="qty"||f==="rate"?parseFloat(v)||0:v,taxable:(f==="qty"?parseFloat(v)||0:it.qty)*(f==="rate"?parseFloat(v)||0:it.rate)}:it));
+  const tot=items.reduce((s,i)=>s+i.taxable,0);
+  return(<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.5)",zIndex:1000,display:"flex",alignItems:"center",justifyContent:"center",padding:16}}><div style={{background:"#fff",border:`2px solid ${K.border}`,borderRadius:18,width:"100%",maxWidth:580,maxHeight:"88vh",overflowY:"auto",boxShadow:"0 8px 40px rgba(0,0,0,0.18)"}}><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"16px 20px",borderBottom:`2px solid ${K.border}`,position:"sticky",top:0,background:"#fff"}}><span style={{fontWeight:800,fontSize:16}}>✏️ {t.editInvoice} — {order.id}</span><button style={{background:"none",border:"none",color:"#999",cursor:"pointer",fontSize:24}} onClick={onClose}>✕</button></div><div style={{padding:20}}>{items.map((it,idx)=>(<div key={idx} style={{background:"#f5f8f2",border:`1.5px solid ${K.border}`,borderRadius:12,padding:14,marginBottom:10}}><div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"center"}}><input style={{...S.inp,flex:2,minWidth:110}} value={it.name} onChange={e=>upd(idx,"name",e.target.value)}/><input style={{...S.inp,width:58,flexShrink:0}} type="number" value={it.qty} onChange={e=>upd(idx,"qty",e.target.value)}/><input style={{...S.inp,width:52,flexShrink:0}} value={it.unit} onChange={e=>upd(idx,"unit",e.target.value)}/><input style={{...S.inp,width:68,flexShrink:0}} type="number" value={it.rate} onChange={e=>upd(idx,"rate",e.target.value)}/><div style={{color:K.green,fontWeight:800,fontSize:15,minWidth:80,textAlign:"right"}}>₹{Number(it.taxable).toLocaleString("en-IN")}</div><button style={{background:"#fdeaea",border:"1px solid #e08080",borderRadius:8,color:K.red,cursor:"pointer",padding:"6px 10px",fontWeight:700}} onClick={()=>setItems(p=>p.filter((_,i)=>i!==idx))}>✕</button></div></div>))}<div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:16,paddingTop:16,borderTop:`2px solid ${K.border}`}}><div><div style={{fontSize:14,color:K.mu}}>Taxable: ₹{Number(tot).toLocaleString("en-IN")}</div><div style={{fontSize:14,color:K.mu}}>GST 5%: ₹{Number(Math.round(tot*.05)).toLocaleString("en-IN")}</div><div style={{fontWeight:800,fontSize:18,color:K.green}}>Total: ₹{Number(tot+Math.round(tot*.05)).toLocaleString("en-IN")}</div></div><div style={{display:"flex",gap:10}}><button style={{padding:"10px 18px",borderRadius:10,border:`2px solid ${K.border}`,background:"#fff",color:K.mu,cursor:"pointer",fontWeight:600}} onClick={onClose}>{t.cancel}</button><button style={{padding:"10px 18px",borderRadius:10,border:"none",background:K.green,color:"#fff",cursor:"pointer",fontWeight:700,fontSize:15}} onClick={()=>onSave(order.id,items)}>💾 {t.saveChanges}</button></div></div></div></div></div>);
+}
+
+function DlModal({inv,cli,onClose,t}){
+  const[view,setV]=useState("choose");
+  const ref=useRef();
+  if(!inv||!cli)return null;
+  const gr=inv.gstRate||5,tx=inv.taxable||(inv.amount-(inv.gst||0)),gst=inv.gst||Math.round(tx*gr/100),tot=inv.amount||(tx+gst),its=inv.items||[];
+  const print=()=>{const w=window.open("","_blank","width=900,height=750");if(!w)return alert("Allow popups to print.");w.document.write(`<html><head><title>${inv.id}</title><style>*{margin:0;padding:0;box-sizing:border-box;}body{font-family:Arial,sans-serif;font-size:11px;}table{border-collapse:collapse;width:100%;}td,th{border:1px solid #999;padding:5px 7px;vertical-align:top;}th{background:#f0f0f0;font-weight:bold;}@media print{body{-webkit-print-color-adjust:exact;}}</style></head><body>${ref.current.innerHTML}</body></html>`);w.document.close();setTimeout(()=>{w.focus();w.print();},500);};
+  const dlCSV=()=>{const rows=[[`TAX INVOICE - ${BUSINESS.name}`],[`GSTIN: ${BUSINESS.gstin}`],[],["Invoice No:",inv.id,"Date:",inv.date],["Buyer:",cli.name],[],["Sr.","Product","HSN","Qty","Unit","Rate","Taxable",`IGST ${gr}%`,"Total"],...its.map((it,i)=>[i+1,it.name,it.hsn,it.qty,it.unit,it.rate,it.taxable,Math.round(it.taxable*gr/100),Math.round(it.taxable*(1+gr/100))]),[],[,"","","","","","Taxable","",tx],[,"","","","","",`IGST`,"",gst],[,"","","","","","Total","",tot],[],["Total in words:",toWords(tot)]];const csv=rows.map(r=>r.map(c=>`"${String(c||"").replace(/"/g,'""')}"`).join(",")).join("\n");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));a.download=`${inv.id}.csv`;a.click();};
+  const waMsg=`*${inv.id} — ${BUSINESS.name}*\nClient: ${cli.name}\nDate: ${inv.date} · Due: ${inv.dueDate||""}\n\nTaxable: ₹${Number(tx).toLocaleString("en-IN")}\nIGST ${gr}%: ₹${Number(gst).toLocaleString("en-IN")}\n*Total: ₹${Number(tot).toLocaleString("en-IN")}*\n\n${toWords(tot)}\n\nBank: ${BUSINESS.bank} | A/C: ${BUSINESS.accNo} | UPI: ${BUSINESS.upi}\n\nPlease pay by due date 🙏`;
+  return(<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.5)",zIndex:1000,display:"flex",alignItems:"center",justifyContent:"center",padding:16}}><div style={{background:"#fff",border:`2px solid ${K.border}`,borderRadius:18,width:"100%",maxWidth:540,maxHeight:"92vh",overflowY:"auto",boxShadow:"0 8px 40px rgba(0,0,0,0.18)"}}><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"16px 20px",borderBottom:`2px solid ${K.border}`,position:"sticky",top:0,background:"#fff"}}><span style={{fontWeight:800,fontSize:15}}>📥 {inv.id} · ₹{Number(tot).toLocaleString("en-IN")}</span><button style={{background:"none",border:"none",color:"#999",cursor:"pointer",fontSize:24}} onClick={onClose}>✕</button></div>
+  {view==="choose"?(<div style={{padding:20}}>
+    <button onClick={()=>setV("preview")} style={{display:"flex",alignItems:"center",gap:16,padding:18,background:"#f5f8f2",border:`2px solid ${K.border}`,borderRadius:14,cursor:"pointer",textAlign:"left",width:"100%",marginBottom:10}}><span style={{fontSize:32}}>📄</span><div><div style={{fontWeight:800,color:K.text,fontSize:15}}>{t.pdfPrint}</div><div style={{fontSize:13,color:K.mu,marginTop:3}}>{t.printReady}</div></div></button>
+    <button onClick={dlCSV} style={{display:"flex",alignItems:"center",gap:16,padding:18,background:"#f5f8f2",border:`2px solid ${K.border}`,borderRadius:14,cursor:"pointer",textAlign:"left",width:"100%",marginBottom:10}}><span style={{fontSize:32}}>📊</span><div><div style={{fontWeight:800,color:K.text,fontSize:15}}>{t.excelCsv}</div><div style={{fontSize:13,color:K.mu,marginTop:3}}>{t.openExcel}</div></div></button>
+    <a href={waUrlNoPhone(waMsg)} target="_blank" rel="noopener noreferrer" style={{display:"flex",alignItems:"center",gap:16,padding:18,background:"#f0fff4",border:"2px solid #b2dfdb",borderRadius:14,textDecoration:"none",boxSizing:"border-box"}}><span style={{fontSize:32}}>💬</span><div><div style={{fontWeight:800,color:"#1a7a1a",fontSize:15}}>{t.whatsapp}</div><div style={{fontSize:13,color:K.mu,marginTop:3}}>Opens WhatsApp directly ✓</div></div></a>
+  </div>):(<div style={{padding:16}}><div style={{display:"flex",gap:8,marginBottom:14}}><button style={{padding:"9px 18px",borderRadius:10,border:"none",background:K.green,color:"#fff",cursor:"pointer",fontWeight:700,fontSize:14}} onClick={print}>🖨️ {t.pdfPrint}</button><button style={{padding:"9px 18px",borderRadius:10,border:`2px solid ${K.border}`,background:"#fff",color:K.mu,cursor:"pointer",fontWeight:600,fontSize:14}} onClick={()=>setV("choose")}>← {t.back}</button></div>
+  <div ref={ref} style={{background:"#fff",color:"#000",fontFamily:"Arial,sans-serif",fontSize:11,padding:18,borderRadius:8,lineHeight:1.4}}>
+    <table style={{border:"none",marginBottom:6}}><tbody><tr><td style={{border:"none",verticalAlign:"top",width:"60%"}}><div style={{display:"flex",alignItems:"center",gap:10,marginBottom:4}}><svg width="40" height="40" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#2d7a22"/><text x="50" y="44" textAnchor="middle" fill="white" fontSize="22" fontWeight="900" fontFamily="Arial Black">MKS</text><text x="50" y="60" textAnchor="middle" fill="#b8f0b4" fontSize="8" fontFamily="Arial">ENTERPRISES</text></svg><div><div style={{fontSize:22,fontWeight:900}}>{BUSINESS.name}</div><div style={{fontSize:10,color:"#333",marginTop:2,whiteSpace:"pre-line"}}>{BUSINESS.address}</div></div></div></td><td style={{border:"none",textAlign:"right",verticalAlign:"top",fontSize:10}}><div><b>Phone:</b> {BUSINESS.phone}</div><div><b>Email:</b> {BUSINESS.email}</div><div><b>GSTIN:</b> {BUSINESS.gstin}</div></td></tr></tbody></table>
+    <table style={{marginBottom:0}}><tbody><tr><td style={{padding:"5px 8px",textAlign:"center"}}><b style={{fontSize:16}}>TAX INVOICE</b></td></tr></tbody></table>
+    <table><tbody><tr><td style={{padding:"6px 8px",verticalAlign:"top",width:"50%",fontSize:10}}><b>Buyer:</b> {cli.name}<br/><b>Address:</b> {cli.address}<br/><b>GSTIN:</b> {cli.gstin}</td><td style={{padding:"6px 8px",verticalAlign:"top",width:"50%",fontSize:10}}><b>Invoice No:</b> {inv.id}<br/><b>Date:</b> {inv.date}<br/><b>Due Date:</b> {inv.dueDate||""}</td></tr></tbody></table>
+    <table><thead><tr style={{background:"#f0f0f0"}}>{["Sr.","Product","HSN","Qty","Rate","Taxable",`IGST%`,"IGST Amt","Total"].map((h,i)=>(<th key={h} style={{padding:"5px 6px",fontSize:10,textAlign:i===0?"center":i>=3?"right":"left"}}>{h}</th>))}</tr></thead><tbody>{its.map((it,i)=>(<tr key={i}><td style={{textAlign:"center"}}>{i+1}</td><td>{it.name}</td><td style={{textAlign:"center"}}>{it.hsn}</td><td style={{textAlign:"right"}}>{it.qty} {it.unit}</td><td style={{textAlign:"right"}}>{Number(it.rate).toFixed(2)}</td><td style={{textAlign:"right"}}>{Number(it.taxable).toLocaleString("en-IN",{minimumFractionDigits:2})}</td><td style={{textAlign:"center"}}>{gr}%</td><td style={{textAlign:"right"}}>{Number(Math.round(it.taxable*gr/100)).toLocaleString("en-IN",{minimumFractionDigits:2})}</td><td style={{textAlign:"right"}}>{Number(Math.round(it.taxable*(1+gr/100))).toLocaleString("en-IN",{minimumFractionDigits:2})}</td></tr>))}<tr style={{background:"#f5f5f5",fontWeight:"bold"}}><td colSpan={5} style={{textAlign:"right"}}>Total</td><td style={{textAlign:"right"}}>{Number(tx).toLocaleString("en-IN",{minimumFractionDigits:2})}</td><td></td><td style={{textAlign:"right"}}>{Number(gst).toLocaleString("en-IN",{minimumFractionDigits:2})}</td><td style={{textAlign:"right"}}>{Number(tot).toLocaleString("en-IN",{minimumFractionDigits:2})}</td></tr></tbody></table>
+    <table><tbody><tr><td style={{padding:"6px 8px",width:"50%",fontSize:10}}><b>Total in words:</b><br/><em>{toWords(tot)}</em></td><td style={{padding:"6px 8px",width:"50%",fontSize:10}}><b>Bank:</b> {BUSINESS.bank}, {BUSINESS.branch}<br/><b>A/C:</b> {BUSINESS.accNo}<br/><b>IFSC:</b> {BUSINESS.ifsc}<br/><b>UPI:</b> {BUSINESS.upi}</td></tr><tr><td colSpan={2} style={{padding:"10px 8px",textAlign:"right"}}><b>For {BUSINESS.name}</b><br/><br/><span style={{fontSize:10}}>Authorised Signatory</span></td></tr></tbody></table>
+  </div></div>)}
+  </div></div>);
+}
+
+function App(){
+  const[lang,setLang]=useState("en");
+  const t=T[lang];
+  const[screen,setS]=useState("login");
+  const[client,setC]=useState(null);
+  const[phone,setP]=useState("");
+  const[otp,setO]=useState("");
+  const[otpSent,setOS]=useState(false);
+  const[orders,setOrders]=useState(SEED);
+  const[cart,setCart]=useState({});
+  const[cat,setCat]=useState("All");
+  const[toast,setT]=useState(null);
+  const[last,setLast]=useState(null);
+  const[dlInv,setDI]=useState(null);
+  const[dlCli,setDC]=useState(null);
+  const[editOrd,setEO]=useState(null);
+  const[aTab,setAT]=useState("orders");
+  const[srch,setSrch]=useState("");
+  const[flt,setFlt]=useState("All");
+  const[payAmt,setPA]=useState("");
+  const[payNote,setPN]=useState("");
+  const[emg,setEmg]=useState("");
+  const[listening,setListening]=useState(false);
+  const voiceRef=useRef(null);
+
+  const toast2=(msg,type="s")=>{setT({msg,type});setTimeout(()=>setT(null),3000);};
+  const openDl=(inv,cli)=>{setDI(inv);setDC(cli||client);};
+  const closeDl=()=>{setDI(null);setDC(null);};
+  const startVoice=(setter)=>{if(!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)){toast2("Voice not supported","e");return;}const SR=window.SpeechRecognition||window.webkitSpeechRecognition;const r=new SR();r.lang=lang==="te"?"te-IN":lang==="ko"?"ko-KR":"en-IN";r.onstart=()=>setListening(true);r.onend=()=>setListening(false);r.onresult=e=>{const txt=e.results[0][0].transcript;setter(p=>p+(p?" ":"")+txt);};r.onerror=()=>setListening(false);voiceRef.current=r;r.start();};
+
+  const sendOtp=()=>{if(phone.length!==10)return toast2("Enter valid 10-digit number","e");setOS(true);toast2("OTP sent! (demo: 1234)");};
+  const verifyOtp=()=>{if(otp!=="1234")return toast2("Wrong OTP. Use 1234","e");if(phone===ADMIN){setC({name:"Admin",id:0,isAdmin:true});setS("admin");}else if(CLIENTS[phone]){setC(CLIENTS[phone]);setS("dash");}else toast2("Number not registered","e");};
+  const logout=()=>{setS("login");setC(null);setP("");setO("");setOS(false);setCart({});closeDl();};
+
+  const items=client&&!client.isAdmin?(CLIENT_PRICES[client.id]||[]):[];
+  const filt=cat==="All"?items:items.filter(i=>i.category===cat);
+  const ci=Object.entries(cart).map(([id,qty])=>{const it=items.find(i=>i.id===parseInt(id));return it?{...it,qty}:null;}).filter(Boolean);
+  const csub=ci.reduce((s,i)=>s+i.price*i.qty,0);
+  const cgst=Math.round(csub*0.05);
+  const ctot=csub+cgst;
+  const ccnt=Object.values(cart).reduce((s,v)=>s+v,0);
+
+  const place=()=>{const ord={id:nextNo(orders),date:ts(),dueDate:dd(client.creditDays),client:client.name,clientId:client.id,clientData:{...client},items:ci.map(i=>({name:i.name,hsn:i.hsn,qty:i.qty,unit:i.unit,rate:i.price,taxable:i.price*i.qty})),taxable:csub,gst:cgst,gstRate:5,amount:ctot,status:"Received",invStatus:"Pending",paidAmt:0};setOrders(p=>[ord,...p]);setLast(ord);setCart({});setS("confirm");};
+  const upSt=(id,st)=>setOrders(p=>p.map(o=>o.id===id?{...o,status:st}:o));
+  const upIS=(id,is)=>setOrders(p=>p.map(o=>o.id===id?{...o,invStatus:is}:o));
+  const mkPaid=(id,amt)=>setOrders(p=>p.map(o=>o.id===id?{...o,paidAmt:parseFloat(amt)||o.amount,invStatus:"Paid"}:o));
+  const saveEdit=(id,its)=>{const tx=its.reduce((s,i)=>s+i.taxable,0);const g=Math.round(tx*.05);setOrders(p=>p.map(o=>o.id===id?{...o,items:its,taxable:tx,gst:g,amount:tx+g}:o));setEO(null);toast2("Invoice updated!");};
+
+  const ford=useMemo(()=>orders.filter(o=>{const ms=!srch||o.client.toLowerCase().includes(srch.toLowerCase())||o.id.toLowerCase().includes(srch.toLowerCase());const mf=flt==="All"||o.status===flt||o.invStatus===flt;return ms&&mf;}),[orders,srch,flt]);
+  const csum=useMemo(()=>Object.entries(CLIENTS).map(([ph,c])=>{const co=orders.filter(o=>o.clientId===c.id);return{...c,phone:ph,outstanding:co.reduce((s,o)=>s+(o.amount-(o.paidAmt||0)),0),overdue:co.filter(o=>o.invStatus==="Overdue").length,tot:co.length};}),[orders]);
+
+  const totOut=csum.reduce((s,c)=>s+c.outstanding,0);
+  const totRec=orders.reduce((s,o)=>s+(o.paidAmt||0),0);
+  const totInv=orders.reduce((s,o)=>s+o.amount,0);
+  const ATABS=[{id:"orders",e:"📦",l:t.orders},{id:"clients",e:"👥",l:t.clients},{id:"summary",e:"📊",l:t.outstanding2},{id:"prices",e:"💲",l:t.priceLists}];
+
+  const buildOrderWA=(ord)=>{const msg=`*${ord.id} — ${BUSINESS.name}*\n\n${ord.items.map(i=>`• ${i.name}: ${i.qty} ${i.unit} @ ₹${i.rate}`).join("\n")}\n\n${t.taxable}: ₹${Number(ord.taxable).toLocaleString("en-IN")}\nIGST 5%: ₹${Number(ord.gst).toLocaleString("en-IN")}\n*${t.grandTotal}: ₹${Number(ord.amount).toLocaleString("en-IN")}*\n\n${t.dueDate}: ${ord.dueDate}\n\n🙏 ${BUSINESS.name}`;return waUrl(BUSINESS.phone,msg);};
+  const buildRemindWA=(o)=>{const msg=`Dear ${o.clientData?.contact||o.client},\n\nYour payment of ₹${Number(o.amount-(o.paidAmt||0)).toLocaleString("en-IN")} is due for Invoice ${o.id}.\n\nBank: ${BUSINESS.bank} | A/C: ${BUSINESS.accNo} | UPI: ${BUSINESS.upi}\n\nThank you 🙏\n${BUSINESS.name}`;return waUrl(o.clientData?.phone||"",msg);};
+  const buildSummaryWA=(c)=>{const msg=`Dear ${c.contact},\n\nAmount ₹${Number(c.outstanding).toLocaleString("en-IN")} is outstanding.\n\nUPI: ${BUSINESS.upi}\nA/C: ${BUSINESS.accNo} | IFSC: ${BUSINESS.ifsc}\n\nThank you 🙏`;return waUrl(c.phone,msg);};
+  const buildEmgWA=(txt)=>{const msg=`⚡ EMERGENCY ORDER\n\nFrom: ${client?.name}\n\nItems needed:\n${txt}\n\nPlease confirm ASAP 🙏`;return waUrl(BUSINESS.phone,msg);};
+
+  // LOGIN
+  if(screen==="login")return(
+    <div style={{...S.app,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:20,background:"linear-gradient(160deg,#e8f5e2 0%,#f5f8f2 60%,#fff 100%)"}}>
+      {toast&&<Tst t={toast}/>}
+      <div style={{width:"100%",maxWidth:420}}>
+        <div style={{display:"flex",justifyContent:"center",marginBottom:20}}><LangPicker lang={lang} setLang={setLang}/></div>
+        <div style={{textAlign:"center",marginBottom:28}}><MKSLogo size={80}/><h1 style={{fontFamily:"'Baloo 2',sans-serif",fontSize:26,color:K.green,margin:"10px 0 2px",fontWeight:800}}>{t.appName}</h1><p style={{color:K.mu,margin:0,fontSize:14}}>{t.tagline}</p></div>
+        <div style={{...S.card(),padding:28}}>
+          <h2 style={{margin:"0 0 4px",fontSize:22,fontWeight:800}}>{t.welcome}</h2>
+          <p style={{color:K.mu,margin:"0 0 22px",fontSize:15}}>{t.loginSub}</p>
+          {!otpSent?(<><label style={{fontSize:14,color:K.mu,display:"block",marginBottom:8,fontWeight:600}}>{t.mobile}</label><div style={{display:"flex",gap:8,marginBottom:18}}><div style={{...S.inp,width:52,textAlign:"center",flexShrink:0,padding:"14px 4px",fontWeight:700}}>+91</div><input style={S.inp} placeholder="9876543210" maxLength={10} value={phone} onChange={e=>setP(e.target.value.replace(/\D/g,""))} onKeyDown={e=>e.key==="Enter"&&sendOtp()} inputMode="numeric"/></div><button style={{...S.btn(K.green),width:"100%",fontSize:18}} onClick={sendOtp}>{t.sendOtp}</button></>):(<><div style={{display:"flex",alignItems:"center",gap:8,marginBottom:18,background:"#f0f7ee",padding:"10px 14px",borderRadius:10}}><span style={{fontSize:14,color:K.mu,flex:1}}>+91 {phone}</span><button style={S.ghost()} onClick={()=>setOS(false)}>{t.change}</button></div><label style={{fontSize:14,color:K.mu,display:"block",marginBottom:8,fontWeight:600}}>{t.enterOtp}</label><input style={{...S.inp,marginBottom:18,letterSpacing:12,fontSize:28,textAlign:"center",fontWeight:700}} placeholder="••••" maxLength={4} value={otp} onChange={e=>setO(e.target.value.replace(/\D/g,""))} onKeyDown={e=>e.key==="Enter"&&verifyOtp()} inputMode="numeric"/><button style={{...S.btn(K.green),width:"100%",fontSize:18}} onClick={verifyOtp}>{t.verify}</button></>)}
+          <p style={{textAlign:"center",color:"#aaa",fontSize:12,margin:"16px 0 0"}}>{t.demoHint}</p>
+        </div>
+      </div>
+    </div>
+  );
+
+  // ADMIN
+  if(screen==="admin")return(
+    <div style={{...S.app,display:"flex"}}>
+      {toast&&<Tst t={toast}/>}
+      {dlInv&&<DlModal inv={dlInv} cli={dlCli} onClose={closeDl} t={t}/>}
+      {editOrd&&<EditModal order={editOrd} onSave={saveEdit} onClose={()=>setEO(null)} t={t}/>}
+      <div style={{width:220,background:"#fff",borderRight:`2px solid ${K.border}`,display:"flex",flexDirection:"column",position:"fixed",top:0,left:0,height:"100vh",zIndex:50,boxShadow:"2px 0 12px rgba(0,0,0,0.06)"}}>
+        <div style={{padding:"18px 16px",borderBottom:`1.5px solid ${K.border}`,display:"flex",alignItems:"center",gap:12}}><MKSLogo size={40}/><div><div style={{fontFamily:"'Baloo 2',sans-serif",color:K.green,fontWeight:800,fontSize:15}}>MKS Admin</div><div style={{fontSize:10,color:K.mu}}>Ayaz Basha</div></div></div>
+        <div style={{padding:"8px 6px"}}><LangPicker lang={lang} setLang={setLang}/></div>
+        <nav style={{flex:1,padding:"8px 6px"}}>{ATABS.map(tab=>(<button key={tab.id} onClick={()=>setAT(tab.id)} style={{width:"100%",display:"flex",alignItems:"center",gap:10,padding:"12px 14px",borderRadius:12,border:"none",cursor:"pointer",marginBottom:4,background:aTab===tab.id?"#e8f5e2":"transparent",color:aTab===tab.id?K.green:K.mu,fontWeight:aTab===tab.id?700:500,fontSize:15}}><span style={{fontSize:18}}>{tab.e}</span>{tab.l}</button>))}</nav>
+        <div style={{padding:12,borderTop:`1.5px solid ${K.border}`}}><button style={{...S.outBtn(),width:"100%",fontSize:14,padding:"10px"}} onClick={logout}>{t.logout}</button></div>
+      </div>
+      <div style={{marginLeft:220,flex:1,minWidth:0,background:"#f5f8f2"}}>
+        <div style={{...S.nav,paddingLeft:20}}><span style={{fontWeight:800,fontSize:17}}>{ATABS.find(x=>x.id===aTab)?.e} {ATABS.find(x=>x.id===aTab)?.l}</span><span style={{fontSize:12,color:K.mu}}>{t.adminPanel}</span></div>
+        <div style={{padding:20,maxWidth:1060}}>
+          {aTab==="orders"&&(<>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(140px,1fr))",gap:12,marginBottom:20}}>{[{l:t.totalInvoiced,v:fi(totInv),e:"🧾",c:K.green},{l:t.collected,v:fi(totRec),e:"✅",c:"#1a7a1a"},{l:t.outstanding2,v:fi(totOut),e:"⚠️",c:K.red},{l:t.newOrders,v:orders.filter(o=>o.status==="Received").length,e:"📦",c:K.bl}].map(k=>(<div key={k.l} style={{...S.card(),textAlign:"center",padding:16}}><div style={{fontSize:22,marginBottom:4}}>{k.e}</div><div style={{fontSize:16,fontWeight:800,color:k.c}}>{k.v}</div><div style={{fontSize:11,color:K.mu,marginTop:2}}>{k.l}</div></div>))}</div>
+            <div style={{display:"flex",gap:10,marginBottom:16,flexWrap:"wrap",alignItems:"center"}}><input style={{...S.inp,maxWidth:260,padding:"10px 14px"}} placeholder={`🔍 ${t.search}`} value={srch} onChange={e=>setSrch(e.target.value)}/><div style={{display:"flex",gap:6,flexWrap:"wrap"}}>{["All","Received","Preparing","Out for Delivery","Delivered","Overdue","Paid"].map(s=>(<button key={s} style={{padding:"7px 12px",borderRadius:10,border:`1.5px solid ${flt===s?K.green:K.border}`,background:flt===s?K.green:"#fff",color:flt===s?"#fff":K.mu,cursor:"pointer",fontSize:12,fontWeight:600}} onClick={()=>setFlt(s)}>{s}</button>))}</div></div>
+            <div style={{display:"flex",flexDirection:"column",gap:10}}>
+              {ford.length===0&&<div style={{...S.card(),textAlign:"center",padding:40,color:K.mu}}>{t.noOrders}</div>}
+              {ford.map(o=>{const outs=o.amount-(o.paidAmt||0);const bc=o.invStatus==="Overdue"?K.red:o.invStatus==="Paid"?K.green:o.status==="Received"?K.bl:K.border;return(<div key={o.id} style={{...S.card({borderLeft:`4px solid ${bc}`,padding:"14px 16px"})}}>
+                <div style={{display:"flex",justifyContent:"space-between",flexWrap:"wrap",gap:8}}><div style={{flex:1,minWidth:180}}><div style={{display:"flex",alignItems:"center",gap:7,flexWrap:"wrap",marginBottom:4}}><span style={{fontWeight:800,fontSize:15}}>{o.id}</span><span style={{color:K.green,fontWeight:700}}>{o.client}</span><span style={S.badge(o.status)}>{o.status}</span><span style={S.badge(o.invStatus)}>{o.invStatus}</span></div><div style={{fontSize:12,color:K.mu,marginBottom:4}}>{o.date} · Due: {o.dueDate}</div><div style={{fontSize:12,color:K.mu}}>{o.items.map(i=>`${EMOJIS[i.name]||"📦"} ${i.name} (${i.qty} ${i.unit})`).join(", ")}</div></div><div style={{textAlign:"right",flexShrink:0}}><div style={{fontWeight:800,fontSize:17,color:K.green}}>{fi(o.amount)}</div>{outs>0&&<div style={{fontSize:12,color:K.red}}>Due: {fi(outs)}</div>}{o.paidAmt>0&&<div style={{fontSize:12,color:"#1a7a1a"}}>Paid: {fi(o.paidAmt)}</div>}</div></div>
+                <div style={{display:"flex",gap:8,marginTop:12,flexWrap:"wrap",alignItems:"center"}}>
+                  {o.status!=="Delivered"&&<select value={o.status} onChange={e=>upSt(o.id,e.target.value)} style={{...S.inp,width:"auto",padding:"7px 10px",fontSize:13,cursor:"pointer"}}>{STAGES.map(s=><option key={s}>{s}</option>)}</select>}
+                  {o.invStatus!=="Paid"&&<select value={o.invStatus} onChange={e=>{if(e.target.value==="Paid"){const a=window.prompt(`Paid amount? (default ₹${o.amount})`);if(a!==null)mkPaid(o.id,a||o.amount);}else upIS(o.id,e.target.value);}} style={{...S.inp,width:"auto",padding:"7px 10px",fontSize:13,cursor:"pointer"}}>{INV_ST.map(s=><option key={s}>{s}</option>)}</select>}
+                  <button style={{padding:"7px 13px",borderRadius:9,background:"#e8f5e2",border:`1px solid ${K.border}`,cursor:"pointer",fontSize:12,fontWeight:600,color:K.green}} onClick={()=>openDl(o,o.clientData)}>🧾 {t.invoice}</button>
+                  <button style={{padding:"7px 13px",borderRadius:9,background:"#fff8e8",border:"1px solid #e8d090",cursor:"pointer",fontSize:12,fontWeight:600,color:"#8a6000"}} onClick={()=>setEO(o)}>✏️ {t.edit}</button>
+                  <a href={buildRemindWA(o)} target="_blank" rel="noopener noreferrer" style={{padding:"7px 13px",borderRadius:9,background:"#e8ffe8",border:"1px solid #90c890",fontSize:12,fontWeight:600,color:"#1a7a1a",textDecoration:"none",display:"inline-flex",alignItems:"center",gap:4}}>💬 {t.remind}</a>
+                </div>
+              </div>);})}
+            </div>
+          </>)}
+          {aTab==="clients"&&(<div style={{...S.card(),overflowX:"auto"}}><h3 style={{margin:"0 0 16px",fontSize:18,fontWeight:800}}>{t.clients}</h3><table style={{width:"100%",borderCollapse:"collapse",fontSize:14,minWidth:560}}><thead><tr style={{borderBottom:`2px solid ${K.border}`}}>{["Client","Contact","Phone","GSTIN","Credit","Orders"].map(h=>(<th key={h} style={{padding:"10px",textAlign:"left",color:K.mu,fontWeight:700}}>{h}</th>))}</tr></thead><tbody>{Object.entries(CLIENTS).map(([ph,c])=>{const s=csum.find(x=>x.id===c.id);return(<tr key={ph} style={{borderBottom:`1px solid ${K.border}`}}><td style={{padding:"12px",fontWeight:700}}>{c.name}</td><td style={{padding:"12px",color:K.green}}>{c.contact}</td><td style={{padding:"12px",color:K.mu}}>{ph}</td><td style={{padding:"12px",fontSize:11}}>{c.gstin}</td><td style={{padding:"12px"}}>{c.creditDays}d</td><td style={{padding:"12px"}}>{s?.tot||0}</td></tr>);})}</tbody></table></div>)}
+          {aTab==="summary"&&(<>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:12,marginBottom:20}}>{[{l:"Total Outstanding",v:fi(totOut),c:K.red},{l:"Overdue Invoices",v:orders.filter(o=>o.invStatus==="Overdue").length,c:K.am},{l:"Total Collected",v:fi(totRec),c:"#1a7a1a"}].map(k=>(<div key={k.l} style={{...S.card(),textAlign:"center"}}><div style={{fontSize:18,fontWeight:800,color:k.c}}>{k.v}</div><div style={{fontSize:12,color:K.mu,marginTop:3}}>{k.l}</div></div>))}</div>
+            {csum.map(c=>{const pct=totOut>0?(c.outstanding/totOut*100):0;const col=c.outstanding===0?K.green:c.overdue>0?K.red:K.am;return(<div key={c.id} style={{...S.card({borderLeft:`4px solid ${col}`,marginBottom:12})}}><div style={{display:"flex",justifyContent:"space-between",flexWrap:"wrap",gap:8,marginBottom:10}}><div><div style={{fontWeight:800,fontSize:16}}>{c.name}</div><div style={{fontSize:13,color:K.mu}}>{c.contact} · {c.phone}</div>{c.overdue>0&&<div style={{fontSize:12,color:K.red,marginTop:3}}>⚠️ {c.overdue} overdue</div>}</div><div style={{textAlign:"right"}}><div style={{fontWeight:800,fontSize:20,color:c.outstanding===0?"#1a7a1a":K.red}}>{fi(c.outstanding)}</div><div style={{fontSize:11,color:K.mu}}>outstanding</div></div></div><div style={{background:"#f0f0f0",borderRadius:6,height:8,overflow:"hidden",marginBottom:12}}><div style={{width:`${pct}%`,height:"100%",background:col,borderRadius:6}}/></div>{c.outstanding>0&&<a href={buildSummaryWA(c)} target="_blank" rel="noopener noreferrer" style={{display:"flex",alignItems:"center",justifyContent:"center",gap:10,padding:"10px 18px",borderRadius:16,background:"#25a244",color:"#fff",fontWeight:700,fontSize:14,textDecoration:"none"}}>💬 {t.sendReminder}</a>}</div>);})}
+          </>)}
+          {aTab==="prices"&&(<div style={S.card()}><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16,flexWrap:"wrap",gap:10}}><h3 style={{margin:0,fontSize:18,fontWeight:800}}>{t.priceLists}</h3><button style={{...S.btn(K.green,{padding:"10px 20px",fontSize:15})}}>📤 {t.uploadExcel}</button></div><div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(200px,1fr))",gap:12}}>{Object.entries(CLIENTS).map(([ph,c])=>(<div key={ph} style={{background:"#f5f8f2",border:`1.5px solid ${K.border}`,borderRadius:14,padding:16}}><div style={{fontWeight:700,marginBottom:4,fontSize:15}}>{c.name}</div><div style={{fontSize:12,color:K.mu,marginBottom:12}}>{CLIENT_PRICES[c.id]?.length||0} items</div><button style={{...S.outBtn({padding:"7px 14px",fontSize:13})}}>{t.updatePrices}</button></div>))}</div></div>)}
+        </div>
+      </div>
+    </div>
+  );
+
+  // DASHBOARD
+  if(screen==="dash"){
+    const mo=orders.filter(o=>o.clientId===client.id);
+    const mout=mo.reduce((s,o)=>s+(o.amount-(o.paidAmt||0)),0);
+    const lo=mo[0];
+    return(<div style={S.app}>
+      {toast&&<Tst t={toast}/>}
+      {dlInv&&<DlModal inv={dlInv} cli={dlCli} onClose={closeDl} t={t}/>}
+      <div style={S.nav}><div style={{display:"flex",alignItems:"center",gap:10}}><MKSLogo size={36}/><div><div style={{fontFamily:"'Baloo 2',sans-serif",color:K.green,fontWeight:800,fontSize:15,lineHeight:1.1}}>{t.appName}</div><div style={{fontSize:10,color:K.mu}}>{client.name}</div></div></div><div style={{display:"flex",alignItems:"center",gap:8}}><LangPicker lang={lang} setLang={setLang}/><button style={S.ghost()} onClick={logout}>↩</button></div></div>
+      <div style={{padding:"16px",maxWidth:560,margin:"0 auto"}}>
+        <div style={{...S.card({background:"linear-gradient(135deg,#2d7a22,#3a9e2c)",border:"none",marginBottom:16,padding:20})}}><div style={{fontSize:20,fontWeight:800,color:"#fff"}}>{t.hello}, {client.contact.split(" ")[0]}! 👋</div><div style={{fontSize:13,color:"#c8f0c8",marginTop:3}}>{client.name}</div><div style={{display:"flex",gap:16,marginTop:16}}><div style={{background:"rgba(255,255,255,0.15)",borderRadius:12,padding:"10px 16px",textAlign:"center",flex:1}}><div style={{fontSize:18,fontWeight:800,color:mout>0?"#ffd0d0":"#fff"}}>{fi(mout)}</div><div style={{fontSize:11,color:"#c8f0c8"}}>{t.outstanding}</div></div><div style={{background:"rgba(255,255,255,0.15)",borderRadius:12,padding:"10px 16px",textAlign:"center",flex:1}}><div style={{fontSize:18,fontWeight:800,color:"#fff"}}>{mo.length}</div><div style={{fontSize:11,color:"#c8f0c8"}}>{t.totalOrders}</div></div></div></div>
+        {lo&&<div style={{...S.card({border:`2px solid ${K.green}30`,marginBottom:14,background:"#f0fff0"})}}><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}><span style={{fontWeight:800,fontSize:15,color:K.green}}>🔁 {t.reorderLast}</span><span style={{fontSize:11,color:K.mu}}>{lo.id}</span></div><div style={{fontSize:13,color:K.mu,marginBottom:12}}>{lo.items.map(i=>`${EMOJIS[i.name]||"📦"} ${i.name} (${i.qty} ${i.unit})`).join(", ")}</div><button style={{...S.btn(K.green),width:"100%",fontSize:15}} onClick={()=>{const nc={};lo.items.forEach(i=>{const it=items.find(x=>x.name===i.name);if(it)nc[it.id]=i.qty;});setCart(nc);setS("cart");}}>🔁 {t.reorderLast} · {fi(lo.amount)} →</button></div>}
+        <p style={{fontSize:13,color:K.mu,textTransform:"uppercase",letterSpacing:1,marginBottom:12,fontWeight:700}}>{t.quickActions}</p>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginBottom:16}}>{[{e:"🛍️",l:t.placeOrder,s:t.weeklyGrocery,a:()=>setS("order"),c:K.green},{e:"⚡",l:t.emergency,s:t.urgentItems,a:()=>setS("emg"),c:K.am},{e:"💳",l:t.sendPayment,s:t.shareProof,a:()=>setS("pay"),c:K.bl},{e:"🧾",l:t.myInvoices,s:t.viewBills,a:()=>setS("inv"),c:"#9b59b6"}].map(a=>(<button key={a.l} onClick={a.a} style={{...S.card({border:"none",cursor:"pointer",textAlign:"left",padding:20,boxShadow:`0 4px 16px ${a.c}22`})}}><div style={{fontSize:34,marginBottom:8}}>{a.e}</div><div style={{fontWeight:800,fontSize:16,color:a.c}}>{a.l}</div><div style={{fontSize:12,color:K.mu,marginTop:3}}>{a.s}</div></button>))}</div>
+        {mo.filter(o=>o.status!=="Delivered").length>0&&<><p style={{fontSize:13,color:K.mu,textTransform:"uppercase",letterSpacing:1,marginBottom:10,fontWeight:700}}>{t.liveTracking}</p>{mo.filter(o=>o.status!=="Delivered").map(o=>(<div key={o.id} style={{...S.card({marginBottom:12})}}><div style={{display:"flex",justifyContent:"space-between",marginBottom:14}}><span style={{fontWeight:700,fontSize:14}}>{o.id}</span><span style={S.badge(o.status)}>{o.status}</span></div><div style={{display:"flex",justifyContent:"space-between",position:"relative",padding:"0 4px"}}><div style={{position:"absolute",top:16,left:"8%",right:"8%",height:3,background:"#e8f0e0"}}/><div style={{position:"absolute",top:16,left:"8%",height:3,background:K.green,width:`${(STAGES.indexOf(o.status)/(STAGES.length-1))*84}%`,transition:"width .5s"}}/>{STAGES.map((st,i)=>{const done=STAGES.indexOf(o.status)>=i;return(<div key={st} style={{textAlign:"center",zIndex:2,flex:1}}><div style={{width:32,height:32,borderRadius:"50%",margin:"0 auto 6px",background:done?K.green:"#e8f0e0",display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,color:done?"#fff":K.mu,fontWeight:700,border:`2px solid ${done?K.green:"#ccc"}`}}>{done?"✓":i+1}</div><div style={{fontSize:10,color:done?K.green:K.mu,fontWeight:done?700:400,lineHeight:1.3}}>{st.split(" ").join("\n")}</div></div>);})}</div></div>))}</>}
+        {mo.length>0&&<><p style={{fontSize:13,color:K.mu,textTransform:"uppercase",letterSpacing:1,marginBottom:10,fontWeight:700,marginTop:14}}>{t.recentOrders}</p><div style={S.card()}>{mo.slice(0,4).map((o,i,arr)=>(<div key={o.id} style={{display:"flex",justifyContent:"space-between",alignItems:"center",paddingBottom:i<arr.length-1?14:0,marginBottom:i<arr.length-1?14:0,borderBottom:i<arr.length-1?`1px solid ${K.border}`:"none"}}><div><div style={{fontWeight:700,fontSize:14}}>{o.id}</div><div style={{fontSize:12,color:K.mu}}>{o.date} · {o.items.length} items</div></div><div style={{textAlign:"right",display:"flex",flexDirection:"column",alignItems:"flex-end",gap:5}}><span style={{fontWeight:700,color:K.green,fontSize:14}}>{fi(o.amount)}</span><button style={{padding:"4px 10px",borderRadius:8,background:"#e8f5e2",border:`1px solid ${K.border}`,cursor:"pointer",fontSize:11,fontWeight:600,color:K.green}} onClick={()=>openDl(o,client)}>🧾 {t.invoice}</button></div></div>))}</div></>}
+      </div>
+      <div style={{height:70}}/><BottomNav screen={screen} setS={setS} t={t}/>
+    </div>);
+  }
+
+  // ORDER
+  if(screen==="order")return(<div style={S.app}>
+    {toast&&<Tst t={toast}/>}
+    <div style={S.nav}><button style={S.ghost()} onClick={()=>setS("dash")}>← {t.back}</button><span style={{fontWeight:800,fontSize:16}}>🛍️ {t.placeOrder}</span>{ccnt>0?<button style={{...S.btn(K.green,{padding:"8px 14px",fontSize:13})}} onClick={()=>setS("cart")}>{t.cart} ({ccnt}) →</button>:<div style={{width:80}}/>}</div>
+    <div style={{padding:"14px 16px",maxWidth:560,margin:"0 auto"}}>
+      <div style={{display:"flex",gap:8,overflowX:"auto",marginBottom:14,paddingBottom:2}}>{CATS.map(c=><button key={c} style={{whiteSpace:"nowrap",padding:"10px 18px",borderRadius:12,border:`2px solid ${cat===c?K.green:K.border}`,background:cat===c?K.green:"#fff",color:cat===c?"#fff":K.mu,cursor:"pointer",fontSize:14,fontWeight:700,flexShrink:0}} onClick={()=>setCat(c)}>{c}</button>)}</div>
+      <div style={{display:"flex",flexDirection:"column",gap:10}}>{filt.map(item=>{const qty=cart[item.id]||0;return(<div key={item.id} style={{...S.card({padding:"14px 16px"}),display:"flex",alignItems:"center",justifyContent:"space-between",gap:10}}><div style={{display:"flex",alignItems:"center",gap:12,flex:1,minWidth:0}}><div style={{fontSize:36,flexShrink:0}}>{EMOJIS[item.name]||"📦"}</div><div><div style={{fontWeight:700,fontSize:15}}>{item.name}</div><div style={{fontSize:12,color:K.mu}}>{item.category} · {t.perUnit} {item.unit}</div><div style={{fontSize:18,fontWeight:800,color:K.green,marginTop:2}}>₹{item.price}</div></div></div><div style={{display:"flex",alignItems:"center",gap:8,flexShrink:0}}>{qty>0?(<><button style={{width:36,height:36,borderRadius:"50%",border:`2px solid ${K.green}`,background:"#fff",color:K.green,cursor:"pointer",fontSize:20,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:700}} onClick={()=>setCart(p=>({...p,[item.id]:Math.max(0,(p[item.id]||0)-1)}))}>−</button><input type="number" min={0} value={qty} onChange={e=>{const v=parseInt(e.target.value)||0;setCart(p=>v===0?Object.fromEntries(Object.entries(p).filter(([k])=>k!==String(item.id))):({...p,[item.id]:v}));}} style={{width:52,textAlign:"center",background:"#f0f7ee",border:`2px solid ${K.border}`,borderRadius:10,color:K.text,fontSize:16,padding:"6px 0",outline:"none",fontWeight:700}} inputMode="numeric"/><button style={{width:36,height:36,borderRadius:"50%",border:"none",background:K.green,color:"#fff",cursor:"pointer",fontSize:20,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:700}} onClick={()=>setCart(p=>({...p,[item.id]:(p[item.id]||0)+1}))}>+</button></>):<button style={{...S.btn(K.green,{padding:"10px 20px",fontSize:14})}} onClick={()=>setCart(p=>({...p,[item.id]:1}))}>{t.add}</button>}</div></div>);})}</div>
+      <div style={{height:80}}/>
+      {ccnt>0&&<div style={{position:"fixed",bottom:0,left:0,right:0,padding:14,background:"#fff",borderTop:`2px solid ${K.border}`}}><button style={{...S.btn(K.green),width:"100%",padding:16,fontSize:17,maxWidth:560,margin:"0 auto"}} onClick={()=>setS("cart")}>{t.cart} ({ccnt} items) · {fi(ctot)} →</button></div>}
+    </div>
+  </div>);
+
+  // CART
+  if(screen==="cart")return(<div style={S.app}>
+    <div style={S.nav}><button style={S.ghost()} onClick={()=>setS("order")}>← {t.back}</button><span style={{fontWeight:800,fontSize:16}}>🛒 {t.cart}</span><div style={{width:60}}/></div>
+    <div style={{padding:"14px 16px",maxWidth:560,margin:"0 auto"}}>
+      {ci.length===0?<div style={{textAlign:"center",padding:60,color:K.mu}}>{t.noOrders}</div>:(<>
+        {ci.map(item=>(<div key={item.id} style={{...S.card({padding:"14px 16px",marginBottom:10}),display:"flex",justifyContent:"space-between",alignItems:"center",gap:10}}><div style={{display:"flex",alignItems:"center",gap:10,flex:1}}><span style={{fontSize:30}}>{EMOJIS[item.name]||"📦"}</span><div><div style={{fontWeight:700,fontSize:15}}>{item.name}</div><div style={{fontSize:13,color:K.mu,marginTop:3,display:"flex",alignItems:"center",gap:6}}>₹{item.price} × <input type="number" min={1} value={item.qty} onChange={e=>{const v=parseInt(e.target.value)||1;setCart(p=>({...p,[item.id]:v}));}} style={{width:54,textAlign:"center",background:"#f0f7ee",border:`2px solid ${K.border}`,borderRadius:8,color:K.text,fontSize:15,padding:"4px 0",outline:"none",fontWeight:700}} inputMode="numeric"/> {item.unit}</div></div></div><div style={{textAlign:"right"}}><div style={{fontWeight:800,color:K.green,fontSize:16}}>{fi(item.price*item.qty)}</div><button style={{fontSize:12,color:K.red,background:"none",border:"none",cursor:"pointer",marginTop:4}} onClick={()=>setCart(p=>{const n={...p};delete n[item.id];return n;})}>✕ {t.remove}</button></div></div>))}
+        <div style={{...S.card({border:`2px solid ${K.green}20`,marginTop:14,background:"#f8fff6"})}}><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}><h3 style={{margin:0,color:K.green,fontSize:17,fontWeight:800}}>📋 {t.billSummary}</h3><span style={{fontSize:12,color:K.mu}}>{client.creditDays} {t.creditDays}</span></div>{ci.map(i=><div key={i.id} style={{display:"flex",justifyContent:"space-between",fontSize:14,marginBottom:6,color:K.mu}}><span>{EMOJIS[i.name]||"📦"} {i.name} ({i.qty} {i.unit})</span><span>{fi(i.price*i.qty)}</span></div>)}<div style={{borderTop:`1.5px solid ${K.border}`,marginTop:12,paddingTop:12}}><div style={{display:"flex",justifyContent:"space-between",fontSize:14,marginBottom:6,color:K.mu}}><span>{t.taxable}</span><span>{fi(csub)}</span></div><div style={{display:"flex",justifyContent:"space-between",fontSize:14,marginBottom:6,color:K.mu}}><span>IGST @ 5%</span><span>{fi(cgst)}</span></div><div style={{display:"flex",justifyContent:"space-between",fontSize:20,fontWeight:800,marginTop:10,color:K.green}}><span>{t.grandTotal}</span><span>{fi(ctot)}</span></div></div><p style={{fontSize:12,color:K.mu,margin:"10px 0 0"}}>{t.dueDate}: {dd(client.creditDays)}</p></div>
+        <button style={{...S.btn(K.green),width:"100%",padding:18,fontSize:18,marginTop:16}} onClick={place}>✅ {t.confirmOrder}</button>
+      </>)}
+    </div>
+  </div>);
+
+  // CONFIRM
+  if(screen==="confirm"&&last)return(<div style={{...S.app,display:"flex",alignItems:"center",justifyContent:"center",padding:20,background:"linear-gradient(160deg,#e8f5e2,#f5f8f2)"}}>
+    {toast&&<Tst t={toast}/>}
+    {dlInv&&<DlModal inv={dlInv} cli={dlCli} onClose={closeDl} t={t}/>}
+    <div style={{...S.card(),maxWidth:440,width:"100%",textAlign:"center",padding:28}}>
+      <div style={{fontSize:64,marginBottom:12}}>✅</div>
+      <h2 style={{fontFamily:"'Baloo 2',sans-serif",color:K.green,margin:"0 0 6px",fontSize:24,fontWeight:800}}>{t.orderPlaced}</h2>
+      <p style={{color:K.mu,fontSize:14,marginBottom:20}}>{last.id} · {t.dueDate}: {last.dueDate}</p>
+      <div style={{background:"#f5f8f2",borderRadius:14,padding:16,marginBottom:18,textAlign:"left"}}>{last.items.map((i,idx)=><div key={idx} style={{display:"flex",justifyContent:"space-between",fontSize:14,marginBottom:6,color:K.mu}}><span>{EMOJIS[i.name]||"📦"} {i.name} ({i.qty} {i.unit})</span><span>{fi(i.taxable)}</span></div>)}<div style={{borderTop:`1.5px solid ${K.border}`,marginTop:10,paddingTop:10,display:"flex",justifyContent:"space-between",fontSize:14,color:K.mu}}><span>IGST 5%</span><span>{fi(last.gst)}</span></div><div style={{display:"flex",justifyContent:"space-between",fontWeight:800,fontSize:20,marginTop:8,color:K.green}}><span>{t.grandTotal}</span><span>{fi(last.amount)}</span></div></div>
+      <WABtn href={buildOrderWA(last)} label={`💬 ${t.whatsappConfirm}`} block style={{marginBottom:12}}/>
+      <button style={{...S.outBtn(),width:"100%",padding:14,fontSize:15,marginBottom:10}} onClick={()=>openDl(last,client)}>📥 {t.downloadInvoice}</button>
+      <button style={{...S.ghost({width:"100%",padding:12,fontSize:14,border:`1.5px solid ${K.border}`,borderRadius:12})}} onClick={()=>setS("dash")}>{t.backDash}</button>
+    </div>
+  </div>);
+
+  // INVOICES
+  if(screen==="inv"){const mi=orders.filter(o=>o.clientId===client.id);return(<div style={S.app}>
+    {toast&&<Tst t={toast}/>}
+    {dlInv&&<DlModal inv={dlInv} cli={dlCli} onClose={closeDl} t={t}/>}
+    <div style={S.nav}><button style={S.ghost()} onClick={()=>setS("dash")}>← {t.back}</button><span style={{fontWeight:800,fontSize:16}}>🧾 {t.invoices}</span><div style={{width:60}}/></div>
+    <div style={{padding:"14px 16px",maxWidth:560,margin:"0 auto"}}>
+      {mi.length===0&&<div style={{...S.card(),textAlign:"center",padding:40,color:K.mu}}>{t.noInvoices}</div>}
+      {mi.map((inv,idx)=>(<div key={inv.id||idx} style={{...S.card({marginBottom:12,borderLeft:`4px solid ${inv.invStatus==="Paid"?K.green:inv.invStatus==="Overdue"?K.red:K.am}`})}}><div style={{display:"flex",justifyContent:"space-between",flexWrap:"wrap",gap:8}}><div><div style={{fontWeight:800,fontSize:16}}>{inv.id}</div><div style={{fontSize:13,color:K.mu,marginTop:2}}>{inv.date} · {t.dueDate}: {inv.dueDate}</div><div style={{marginTop:6,display:"flex",gap:6,flexWrap:"wrap"}}><span style={S.badge(inv.invStatus)}>{inv.invStatus}</span><span style={S.badge(inv.status)}>{inv.status}</span></div></div><div style={{textAlign:"right"}}><div style={{fontSize:20,fontWeight:800,color:K.green}}>{fi(inv.amount)}</div>{(inv.amount-(inv.paidAmt||0))>0&&<div style={{fontSize:12,color:K.red}}>Due: {fi(inv.amount-(inv.paidAmt||0))}</div>}</div></div>{inv.invStatus==="Paid"&&<div style={{marginTop:12,background:"#f0fff0",borderRadius:10,padding:12,fontSize:13}}><div style={{color:"#1a7a1a",fontWeight:700,marginBottom:3}}>✅ {t.paymentReceipt}</div><div style={{color:K.mu}}>{fi(inv.paidAmt||inv.amount)} · {t.fullSettled}</div></div>}<div style={{display:"flex",gap:8,marginTop:14,flexWrap:"wrap"}}><button style={{...S.outBtn({padding:"10px 16px",fontSize:14,flex:1})}} onClick={()=>openDl(inv,client)}>📥 {t.downloadInvoice}</button>{inv.invStatus!=="Paid"&&<button style={{...S.btn(K.bl,{padding:"10px 16px",fontSize:14,flex:1})}} onClick={()=>setS("pay")}>💳 {t.payNow}</button>}</div></div>))}
+    </div>
+    <div style={{height:70}}/><BottomNav screen={screen} setS={setS} t={t}/>
+  </div>);}
+
+  // PAYMENT
+  if(screen==="pay")return(<div style={S.app}>
+    {toast&&<Tst t={toast}/>}
+    <div style={S.nav}><button style={S.ghost()} onClick={()=>setS("dash")}>← {t.back}</button><span style={{fontWeight:800,fontSize:16}}>💳 {t.sendPayment}</span><div style={{width:60}}/></div>
+    <div style={{padding:"14px 16px",maxWidth:440,margin:"0 auto"}}>
+      <div style={{...S.card({textAlign:"center",marginBottom:16,background:"linear-gradient(135deg,#f0fff0,#e8f5e2)",border:`2px solid ${K.green}30`})}}>
+        <h3 style={{margin:"0 0 14px",color:K.green,fontSize:17,fontWeight:800}}>📲 {t.scanUPI}</h3>
+        <img src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=${BUSINESS.upi}&pn=${encodeURIComponent(BUSINESS.accName)}&cu=INR`} alt="UPI QR" style={{width:180,height:180,borderRadius:12,border:`3px solid ${K.green}`,margin:"0 auto",display:"block"}} onError={e=>e.target.style.display="none"}/>
+        <div style={{marginTop:12,fontSize:15,fontWeight:700,color:K.green}}>{BUSINESS.upi}</div>
+        <div style={{fontSize:13,color:K.mu,marginTop:4}}>{BUSINESS.accName}</div>
+      </div>
+      <div style={{...S.card({marginBottom:14})}}><h3 style={{margin:"0 0 12px",fontSize:15,fontWeight:700,color:K.mu}}>{t.orPayTo}</h3>{[["Account Name",BUSINESS.accName],["Account No",BUSINESS.accNo],["IFSC",BUSINESS.ifsc],["Bank & Branch",`${BUSINESS.bank}, ${BUSINESS.branch}`]].map(([k,v])=>(<div key={k} style={{display:"flex",justifyContent:"space-between",marginBottom:8,fontSize:14}}><span style={{color:K.mu}}>{k}</span><span style={{fontWeight:700,textAlign:"right",maxWidth:"58%"}}>{v}</span></div>))}</div>
+      <div style={S.card()}>
+        <label style={{fontSize:14,color:K.mu,display:"block",marginBottom:6,fontWeight:600}}>{t.amountPaid}</label>
+        <input style={{...S.inp,marginBottom:14,fontSize:18,fontWeight:700}} placeholder="₹0.00" type="number" value={payAmt} onChange={e=>setPA(e.target.value)} inputMode="decimal"/>
+        <label style={{fontSize:14,color:K.mu,display:"block",marginBottom:6,fontWeight:600}}>{t.transactionId}</label>
+        <input style={{...S.inp,marginBottom:18}} placeholder="UTR123456789" value={payNote} onChange={e=>setPN(e.target.value)}/>
+        <button style={{...S.btn(K.green),width:"100%",padding:16,fontSize:17}} onClick={()=>{if(!payAmt)return toast2("Enter amount","e");if(!payNote)return toast2("Enter transaction ID","e");toast2("Payment confirmation sent!");setTimeout(()=>setS("dash"),1500);}}>✅ {t.confirmPayment}</button>
+      </div>
+    </div>
+    <div style={{height:70}}/><BottomNav screen={screen} setS={setS} t={t}/>
+  </div>);
+
+  // EMERGENCY
+  if(screen==="emg")return(<div style={S.app}>
+    {toast&&<Tst t={toast}/>}
+    <div style={S.nav}><button style={S.ghost()} onClick={()=>setS("dash")}>← {t.back}</button><span style={{fontWeight:800,fontSize:16}}>⚡ {t.emergencyOrder}</span><div style={{width:60}}/></div>
+    <div style={{padding:"14px 16px",maxWidth:440,margin:"0 auto"}}>
+      <div style={{background:"#fff8e8",border:"2px solid #e8c060",borderRadius:14,padding:16,marginBottom:16}}><p style={{margin:0,color:"#8a5000",fontSize:15,fontWeight:600}}>⚡ Extra charges may apply for urgent delivery.</p></div>
+      <div style={S.card()}>
+        <label style={{fontSize:14,color:K.mu,display:"block",marginBottom:8,fontWeight:600}}>{t.itemsNeeded}</label>
+        <button style={{...S.btn(listening?"#e53935":K.green,{width:"100%",marginBottom:10,padding:"14px",fontSize:16})}} onClick={()=>{if(listening){voiceRef.current?.stop();setListening(false);}else startVoice(setEmg);}}>{listening?`🔴 ${t.listening}`:t.voiceInput}</button>
+        <textarea style={{...S.inp,minHeight:100,resize:"vertical",marginBottom:14,fontSize:15}} placeholder="e.g. 10 Kg Tomatoes, 5 Ltr Milk..." value={emg} onChange={e=>setEmg(e.target.value)}/>
+        <label style={{fontSize:14,color:K.mu,display:"block",marginBottom:8,fontWeight:600}}>{t.requiredBy}</label>
+        <input type="datetime-local" style={{...S.inp,marginBottom:18}}/>
+        {emg.trim()?<WABtn href={buildEmgWA(emg)} label={`⚡ ${t.sendEmergency}`} block style={{background:K.am,boxShadow:`0 4px 14px ${K.am}44`}}/>:<button style={{...S.btn(K.am,{width:"100%",padding:16,fontSize:17,opacity:.5,cursor:"not-allowed"})}} disabled>⚡ {t.sendEmergency}</button>}
+      </div>
+    </div>
+  </div>);
+
+  return null;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
