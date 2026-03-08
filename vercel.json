@@ -1,0 +1,12 @@
+{
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}
+```
+4. Click **"Commit changes"** → **"Commit changes"**
+
+---
+
+### Then check your GitHub repo has exactly these 2 files:
+```
+✅ index.html
+✅ vercel.json
